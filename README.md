@@ -32,7 +32,7 @@ Options:
 
 
 - After pressing `s`, the image will be saved in the provided or default directory, the live feed will close, and a new window with the saved image will be opened.
-  - Click and drag the bounding rectangle around the section of the image containing the object you want to identify. The rectangle must start at the upper lefthand corner and end at the bottom right.
+  - Click and drag to define a bounding rectangle around the section of the image containing the object you want to identify.
   - Press `ESC` to cancel the annotation and delete the most recent image.
 
 - After clicking and dragging, the rectangle will be displayed on the image
