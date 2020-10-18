@@ -100,8 +100,9 @@ class ImageCapture():
 
         print("\n"+ image_path)
 
-        img = cv2.imread(filename=image_path)
-        cv2.imshow("Annotate", img)
+        img_og = cv2.imread(filename=image_path)
+        img_mod = img_og.copy()
+        cv2.imshow("Annotate", img_mod)
         cv2.setMouseCallback('Annotate', self.mouseCB)
 
         while True:
@@ -109,15 +110,33 @@ class ImageCapture():
 
             if self.fully_annotated:
 
-                width = self.endx - self.startx
-                height = self.endy - self.starty
+                cv2.rectangle(img_mod, (self.startx, self.starty), (self.endx, self.endy), (0,0,255))
 
-                line = image_name + " " + str(self.startx) + " " + str(self.starty) + " " + str(width) + " " + str(height) + "\n"
+                print("Press y if the bounding box looks good. ")
 
-                print(line)
+                cv2.imshow("Annotate", img_mod)
+                okay = cv2.waitKey(0)
 
-                self.info_file.write(line)
-                break
+                if okay == ord('y'):
+                    width = self.endx - self.startx
+                    height = self.endy - self.starty
+
+                    line = image_name + " " + str(self.startx) + " " + str(self.starty) + " " + str(width) + " " + str(height) + "\n"
+
+                    print(line)
+
+                    self.info_file.write(line)
+                    break
+
+                else:
+                    self.fully_annotated = False
+                    self.startx = 0
+                    self.starty = 0
+                    self.endx = 0
+                    self.endy = 0
+                    img_mod = img_og.copy()
+                    cv2.imshow("Annotate", img_mod)
+                    okay = cv2.waitKey(1)
 
             elif key == 27:
                 os.remove(image_path)
