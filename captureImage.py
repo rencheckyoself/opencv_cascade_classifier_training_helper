@@ -80,12 +80,14 @@ class ImageCapture():
 
     def mouseCB(self, event, x, y, flags, param):
         if event == cv2.EVENT_LBUTTONDOWN:
-            self.startx, self.starty = x, y
-            print("Down:", x,y)
+            if not self.fully_annotated:
+                self.startx, self.starty = x, y
+                print("Down:", x,y)
         if event == cv2.EVENT_LBUTTONUP:
-            self.endx, self.endy = x,y
-            self.fully_annotated = True
-            print("Up: ", x,y)
+            if not self.fully_annotated:
+                self.endx, self.endy = x,y
+                print("Up: ", x,y)
+                self.fully_annotated = True
 
 
     def shutdown(self):
@@ -118,10 +120,20 @@ class ImageCapture():
                 okay = cv2.waitKey(0)
 
                 if okay == ord('y'):
-                    width = self.endx - self.startx
-                    height = self.endy - self.starty
 
-                    line = image_name + " " + str(self.startx) + " " + str(self.starty) + " " + str(width) + " " + str(height) + "\n"
+                     # start point is the upper left corner of the rect
+                    if self.endx > self.startx:
+                        leftx, lefty = self.startx, self.starty
+                        width = self.endx - self.startx
+                        height = self.endy - self.starty
+
+                     # end point is the upper left corner of the rect
+                    else:
+                        leftx, lefty = self.endx, self.endy
+                        width = self.startx - self.endx
+                        height = self.starty - self.endy
+
+                    line = image_name + " " + str(leftx) + " " + str(lefty) + " " + str(width) + " " + str(height) + "\n"
 
                     print(line)
 
