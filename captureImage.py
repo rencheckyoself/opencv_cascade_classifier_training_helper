@@ -121,17 +121,9 @@ class ImageCapture():
 
                 if okay == ord('y'):
 
-                     # start point is the upper left corner of the rect
-                    if self.endx > self.startx:
-                        leftx, lefty = self.startx, self.starty
-                        width = self.endx - self.startx
-                        height = self.endy - self.starty
-
-                     # end point is the upper left corner of the rect
-                    else:
-                        leftx, lefty = self.endx, self.endy
-                        width = self.startx - self.endx
-                        height = self.starty - self.endy
+                    leftx, lefty = min(self.startx, self.endx), min(self.starty, self.endy)
+                    width = max(self.startx, self.endx) - leftx
+                    height = max(self.starty, self.endy) - lefty
 
                     line = image_name + " " + str(leftx) + " " + str(lefty) + " " + str(width) + " " + str(height) + "\n"
 
